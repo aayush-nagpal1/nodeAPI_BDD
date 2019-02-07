@@ -31,16 +31,19 @@ router.post('/writefile', function (req, res, next) {
 router.get('/returnProduct', function (req, res, next) {
     try {
         let query = req.query;
-
-        if (query.num1 && query.num2 && !isNaN(query.num1) && !isNaN(query.num2)) {
-            res.json({
-                result: Number(query.num1) * Number(query.num2)
-            });
-        } else if (isNaN(query.num1) || isNaN(query.num2)) {
-            res.json({
-                errMes: "PLEASE Use num1 and num2 as Integer"
-            });
+        let keys = Object.keys(query);
+        if ("num1" === keys[0] && "num2" === keys[1]) {
+            if (query.num1 && query.num2 && !isNaN(query.num1) && !isNaN(query.num2)) {
+                res.json({
+                    result: Number(query.num1) * Number(query.num2)
+                });
+            } else {
+                res.json({
+                    errMes: "PLEASE Use num1 and num2 as Integer"
+                });
+            }
         } else {
+
             res.json({
                 errMes: "PLEASE Use num1 and num2 as Arguments"
             });
@@ -70,15 +73,15 @@ router.get('/repeatedLetter', function (req, res, next) {
             string
         } = req.query;
         if (string) {
+            finalResult = null;
             for (const i of string) {
                 if ((string.split(i).length - 1) == 1) {
-                    res.json({
-                        result: i
-                    })
+                    finalResult = i;
+                    break;
                 }
-            }
+            }            
             res.json({
-                res: null
+                res: finalResult
             });
         } else {
             res.json({

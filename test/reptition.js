@@ -1,51 +1,54 @@
 const chai = require('chai');
-//const chaiHttp = require('chai-http');
-const should = chai.should();
-const axios = require('axios') 
-const asset = chai.assert;
-const expect= chai.expect;
-const request= require('request');
+const expect = chai.expect;
+const server = require('../app');
+const chaiHttp = require('chai-http');
+chai.use(chaiHttp);
 
-describe('Return Product of integers',function(){
-    it('should return first non repeated alphabet', function(done) {
-       let params = "?string=aaaabccccc"
-       request.get('http://localhost:3001/repeatedLetter'+params,function(err,req,res){
-        let result =JSON.parse(res)
-        console.log(result.result);
-        expect(result.result).to.equal("b");
-       })
-       done();
-       
-    });
 
-    it('should return first non repeated alphabet', function(done) {
+//Test cases for API that send first repetitve alphabet
+
+describe('Return first non repetitive alphabet of the string', function () {
+   it('input --aaaabccccc------- should return- b', function (done) {
+      let params = "?string=aaaabccccc"
+      chai.request(server)
+         .get('/repeatedLetter' + params)
+         .end((err, res) => {
+            console.log(res.body);
+            expect(res.body.res).to.be.equals("b")
+         })
+      done();
+   });
+
+    it('input --aaaabbbbccccc------- should return- null', function(done) {
         let params = "?string=aaaabbbbccccc"
-        request.get('http://localhost:3001/repeatedLetter'+params,function(err,req,res){
-         let result =JSON.parse(res)
-         console.log(result.result);
-         expect(result.result).to.equal(null);
-        })
+        chai.request(server)
+         .get('/repeatedLetter' + params)
+         .end((err, res) => {
+            console.log(res.body);
+            expect(res.body.res).to.be.equals(null);
+         })
         done();
-        
+
      });
-     it('should return first non repeated alphabet', function(done) {
+     it('input --aaaabbbbcccccd------- should return- d', function(done) {
         let params = "?string=aaaabbbbcccccd"
-        request.get('http://localhost:3001/repeatedLetter'+params,function(err,req,res){
-         let result =JSON.parse(res)
-         console.log(result.result);
-         expect(result.result).to.equal("d");
-        })
+        chai.request(server)
+         .get('/repeatedLetter' + params)
+         .end((err, res) => {
+            console.log(res.body);
+            expect(res.body.res).to.be.equals("d")
+         })
         done();
-        
-     });
-     it('should return first non repeated alphabet', function(done) {
+  });
+
+     it('input --abc------- should return- a', function(done) {
         let params = "?string=abc"
-        request.get('http://localhost:3001/repeatedLetter'+params,function(err,req,res){
-         let result =JSON.parse(res)
-         console.log(result.result);
-         expect(result.result).to.equal("a");
-        })
+        chai.request(server)
+         .get('/repeatedLetter' + params)
+         .end((err, res) => {
+            console.log(res.body);
+            expect(res.body.res).to.be.equals("a")
+         })
         done();
-        
      });
 });
